@@ -15,7 +15,7 @@
 
 .titulo {
     text-align: center;
-    padding: 2em 0;
+    padding: 1em 0 2em;
 }
 
 .titulo span{
@@ -34,8 +34,8 @@
 }
 
 .capa img { 
-    height: 350px;
-    width: 350px;
+    height: 320px;
+    width: 320px;
 }
 
 .musica__container{
