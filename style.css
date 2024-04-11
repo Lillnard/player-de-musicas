@@ -63,12 +63,13 @@
 
 .progresso-container{
     padding: 20px 0;
+    cursor: pointer;
 }
 
 .barra-de-progresso{
     background-color: #cacaca48;
-    height: 2px;
-    cursor: pointer;
+    height: 3px;
+    padding-bottom: 5px;
 }
 .progresso{
     --progresso: 0%;
@@ -84,6 +85,7 @@
 
 .tempo-atual, .tempo-total{
     color: #cacaca;
+    font-size: 15px;
 }
 
 button{

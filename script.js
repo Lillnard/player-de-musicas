@@ -74,8 +74,8 @@ const imOnFire = {
     like: false
 };
 const itsAllOverNowBabyBlue = {
-    nomeDaMusica: "Bob Dylan",
-    nomeDoArtista: "It's All Over Now, Baby Blue",
+    nomeDaMusica: "It's All Over Now, Baby Blue",
+    nomeDoArtista: "Bob Dylan",
     arquivo: "its_all_over_now_baby_blue", 
     like: false
 };
