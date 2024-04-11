@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://kit.fontawesome.com/2021d3515c.js" crossorigin="anonymous"></script>
+
+    <title>Player de Música</title>
+
+</head>
+<body>
+
+    <div class="container">
+            
+        <div class="titulo">
+            <h1>SpotiFAKE</h1>
+        </div>
+
+        <div class="capa">
+            <img src="" alt="Capa do disco" id="capa">
+        </div>
+
+        <audio src=""  id="audio"></audio>
+
+        <div class="musica__container">
+            <div class="musica">
+                <h2 class="nome-musica" id="nome-musica">Nome da música</h2>
+                <h3 class="nome-artista" id="nome-artista">Nome da banda</h3>
+            </div>
+            <button class="curtir" id="curtir">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+            
+            <button class="curtido hide" id="curtido">
+                <i class="fa-solid fa-heart"></i>
+            </button>
+        </div>
+
+        <div class="progresso-container" id="progresso-container">
+            <div class="barra-de-progresso" id="barra-progresso">
+                <div class="progresso" id="progresso"></div>
+            </div>
+            <div class="tempo-container">
+                <div class="tempo-atual" id="tempo-atual">
+                    00:00
+                </div>
+                <div class="tempo total" id="tempo-total">
+                    00:00
+                </div>
+            </div>
+        </div>
+
+        <div class="navegacao">
+            <button><i class="fa-solid fa-shuffle" id="embaralhar"></i></button>
+
+            <button><i class="fa-solid fa-backward-step" id="retornar"></i></button> 
+
+            <button id="play"><i class="fa-regular fa-circle-play"></i></button>
+            
+            <button  id="pause" class="hide"><i class="fa-regular fa-circle-pause"></i></button>
+
+            <button><i class="fa-solid fa-forward-step" id="avancar"></i></button>
+
+            <button ><i class="fa-solid fa-repeat" id="repetir"></i></button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>

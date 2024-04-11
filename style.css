@@ -1,0 +1,94 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #000;
+    color: aliceblue;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+}
+
+button:hover{
+    transform: scale(1.05);
+}
+
+.container {
+    max-width: 350px;
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.titulo {
+    text-align: center;
+    padding: 1em 0 2em;
+}
+
+.capa{
+    display: flex;
+    justify-content: center;
+}
+
+.capa img { 
+    height: 350px;
+    width: 350px;
+}
+
+.musica__container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.curtir i, .curtido i{
+    font-size: 25px;
+}
+
+.curtido i{
+    color: green;
+}
+
+.progresso-container{
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.barra-de-progresso{
+    background-color: rgb(88, 88, 88);
+    height: 2px;
+}
+.progresso{
+    --progresso: 0%;
+    height: 2px;
+    background-color: white;
+    width: var(--progresso);
+}
+
+.tempo-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.navegacao{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 0 15px;
+}
+
+button i.ativo{
+    color: green;
+}
+
+.navegacao i {
+    font-size: 30px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.hide{
+    display: none;
+}
