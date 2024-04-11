@@ -5,6 +5,7 @@
     background-color: #000;
     color: aliceblue;
     font-family: sans-serif;
+    user-select: none;
 }
 
 .container {
@@ -89,10 +90,11 @@ button{
     background-color: transparent;
     border: none;
     cursor: pointer;
+    transition: .2s
 }
 
-button:hover{
-    transform: scale(1.05);
+button:active i{
+    color: #cacaca8a;
 }
 
 button.ativo i{
