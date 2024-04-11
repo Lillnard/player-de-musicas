@@ -4,26 +4,28 @@
     box-sizing: border-box;
     background-color: #000;
     color: aliceblue;
-}
-
-button{
-    background-color: transparent;
-    border: none;
-}
-
-button:hover{
-    transform: scale(1.05);
+    font-family: sans-serif;
 }
 
 .container {
-    max-width: 350px;
+    width: 360px;
     height: 100vh;
     margin: 0 auto;
 }
 
 .titulo {
     text-align: center;
-    padding: 1em 0 2em;
+    padding: 2em 0;
+}
+
+.titulo span{
+    color: #1ED760;
+}
+
+.titulo i{
+    margin-right: 10px;
+    font-size: 40px;
+    color: #1ED760;
 }
 
 .capa{
@@ -43,22 +45,29 @@ button:hover{
     justify-content: space-between;
 }
 
-.curtir i, .curtido i{
-    font-size: 25px;
+.nome-musica{
+    padding-top: 20px;
+    font-size: 30px;
 }
 
-.curtido i{
-    color: green;
+.nome-artista{
+    font-size: 15px;
+    color: #cacaca;
+}
+
+.curtir i{
+    font-size: 25px;
+    color: #cacacab7;
 }
 
 .progresso-container{
-    padding: 10px 0;
-    cursor: pointer;
+    padding: 20px 0;
 }
 
 .barra-de-progresso{
-    background-color: rgb(88, 88, 88);
+    background-color: #cacaca48;
     height: 2px;
+    cursor: pointer;
 }
 .progresso{
     --progresso: 0%;
@@ -72,6 +81,24 @@ button:hover{
     justify-content: space-between;
 }
 
+.tempo-atual, .tempo-total{
+    color: #cacaca;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover{
+    transform: scale(1.05);
+}
+
+button.ativo i{
+    color: #1ED760;
+}
+
 .navegacao{
     display: flex;
     justify-content: space-around;
@@ -79,16 +106,29 @@ button:hover{
     margin: 0 0 15px;
 }
 
-button i.ativo{
-    color: green;
+.navegacao i {
+    color: #ffffff;
 }
 
-.navegacao i {
+#play, #pause{
+    font-size: 50px;
+}
+
+#retornar, #avancar{
     font-size: 30px;
-    color: #ffffff;
-    cursor: pointer;
+}
+
+#embaralhar, #repetir, #repetir1{
+    font-size: 25px;
 }
 
 .hide{
     display: none;
+}
+
+@media screen and (max-width: 500px){
+    
+    .container{
+        width: 90%;
+    }
 }

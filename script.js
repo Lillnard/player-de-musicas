@@ -6,13 +6,14 @@ const progresso = document.getElementById('progresso');
 const progressoContainer = document.getElementById('progresso-container');
 const tempoAtual = document.getElementById('tempo-atual');
 const tempoTotal = document.getElementById('tempo-total');
-const curtir = document.getElementById('curtir');
 const play = document.getElementById('play');
 const pause = document.getElementById('pause');
 const avancar = document.getElementById('avancar');
 const voltar = document.getElementById('retornar');
 const embaralhar = document.getElementById('embaralhar');
 const repetir = document.getElementById('repetir');
+const repetir1 = document.getElementById('repetir1');
+const curtir = document.getElementById('curtir');
 
 let embaralhado = false;
 let repetindo = false;
@@ -35,19 +36,6 @@ function paraMusica() {
 }
 paraMusica();
 
-function curteMusica() {
-    curtir.addEventListener('click', () => {
-        curtir.classList.add('hide')
-        curtido.classList.remove('hide')
-        like = true;
-    });
-    curtido.addEventListener('click', () => {
-        curtido.classList.add('hide')
-        curtir.classList.remove('hide')
-        like= false;
-    });
-}
-curteMusica();
 
 const patience = {
     nomeDaMusica: "Patience",
@@ -116,7 +104,7 @@ const trouble = {
     like: false
 };
 
-const playlistOrdenada = [patience, ifIHadAGun, imOnFire, itsAllOverNowBabyBlue, trouble, iWannaBeAdored, missAtomicBomb, beiraMar, justLikeHeaven, justLikeHoney, habeasCorpus];
+const playlistOrdenada = JSON.parse(localStorage.getItem('playlist')) ?? [patience, ifIHadAGun, imOnFire, itsAllOverNowBabyBlue, trouble, iWannaBeAdored, missAtomicBomb, beiraMar, justLikeHeaven, justLikeHoney, habeasCorpus];
 let index = 0;
 let playlistEmbaralhada = [...playlistOrdenada]; 
 
@@ -194,10 +182,14 @@ function embaralha(){
 function repeteMusica() {
     if(repetindo === false) {
         repetindo = true;
-        repetir.classList.add('ativo');
+        repetir.classList.add('hide');
+        repetir1.classList.remove('hide');
+        repetir1.classList.add('ativo');
     } else {
         repetindo = false;
-        repetir.classList.remove('ativo');
+        repetir1.classList.remove('ativo');
+        repetir1.classList.add('hide');
+        repetir.classList.remove('hide');
     };
 };
 
@@ -221,6 +213,29 @@ function atualizaTempoTotal() {
     tempoTotal.innerText = converteTempo(musica.duration);
 }
 
+function curteMusica() {
+    if(playlistEmbaralhada[index].like === true) {
+        curtir.querySelector('.bi').classList.remove('bi-heart');
+        curtir.querySelector('.bi').classList.add('bi-heart-fill');
+        curtir.classList.add('ativo');
+    } else {
+        curtir.querySelector('.bi').classList.add('bi-heart');
+        curtir.querySelector('.bi').classList.remove('bi-heart-fill');
+        curtir.classList.remove('ativo');
+    }
+}
+
+function curteMusicaClick() {
+    if(playlistEmbaralhada[index].like === false) {
+        playlistEmbaralhada[index].like = true;
+    } else {
+        playlistEmbaralhada[index].like = false;
+    }
+    curteMusica();
+    localStorage.setItem('playlist', JSON.stringify(playlistOrdenada));
+}
+
+
 avancar.addEventListener('click' , avancaMusica);
 voltar.addEventListener('click', voltaMusica);
 musica.addEventListener('timeupdate', atualizaProgresso);
@@ -230,5 +245,5 @@ progressoContainer.addEventListener('click', avancarPara);
 progressoContainer.addEventListener('click', avancarPara);
 embaralhar.addEventListener('click', embaralha);
 repetir.addEventListener('click', repeteMusica);
-
-
+repetir1.addEventListener('click', repeteMusica);
+curtir.addEventListener('click', curteMusicaClick);
