@@ -90,15 +90,35 @@
       />
     </div>
 
-    <!-- Painel da fila -->
-    <div class="fila hide" id="fila">
-      <div class="fila-header">
-        <h4>Fila</h4>
-        <button id="fechar-fila" title="Fechar fila">
-          <i class="bi bi-x-lg"></i>
-        </button>
+    <!-- OVERLAY DA FILA -->
+    <div class="fila-overlay hide" id="fila-overlay" aria-hidden="true">
+      <div class="fila-panel" role="dialog" aria-modal="true" aria-label="Fila de músicas">
+        <div class="fila-header">
+          <h4>Fila</h4>
+
+          <div class="fila-actions">
+            <button id="fechar-fila" class="fila-close" title="Fechar fila">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="fila-tabs" role="tablist" aria-label="Filtro da fila">
+          <button class="fila-tab ativo" id="tab-todas" type="button" role="tab" aria-selected="true">
+            Todas as músicas
+          </button>
+          <button class="fila-tab" id="tab-curtidas" type="button" role="tab" aria-selected="false">
+            Músicas curtidas
+          </button>
+        </div>
+
+        <div class="fila-body">
+          <ul class="fila-lista" id="fila-lista"></ul>
+          <div class="fila-vazia hide" id="fila-vazia">
+            Nenhuma música curtida ainda 😅
+          </div>
+        </div>
       </div>
-      <ul class="fila-lista" id="fila-lista"></ul>
     </div>
 
   </div>

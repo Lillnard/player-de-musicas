@@ -6,7 +6,6 @@ const nomeArtista = document.getElementById('nome-artista');
 
 const musica = document.getElementById('audio');
 
-const progresso = document.getElementById('progresso');
 const progressoContainer = document.getElementById('progresso-container');
 
 const tempoAtual = document.getElementById('tempo-atual');
@@ -28,9 +27,14 @@ const volume = document.getElementById('volume');
 const mute = document.getElementById('mute');
 
 const btnFila = document.getElementById('btn-fila');
-const fila = document.getElementById('fila');
+
+/* OVERLAY FILA */
+const filaOverlay = document.getElementById('fila-overlay');
 const fecharFila = document.getElementById('fechar-fila');
 const filaLista = document.getElementById('fila-lista');
+const filaVazia = document.getElementById('fila-vazia');
+const tabTodas = document.getElementById('tab-todas');
+const tabCurtidas = document.getElementById('tab-curtidas');
 
 let embaralhado = false;
 let repetindo = false;
@@ -38,6 +42,9 @@ let repetindo = false;
 let index = 0;
 let playlistEmbaralhada = [];
 let dragging = false;
+
+/* estado dos tabs */
+let filtroFila = 'todas'; // 'todas' | 'curtidas'
 
 // ---------- Playlist ----------
 const patience = { nomeDaMusica: "Patience", nomeDoArtista: "Guns N' Roses", arquivo: "patience", like: false };
@@ -52,7 +59,11 @@ const justLikeHoney = { nomeDaMusica: "Just Like Honey", nomeDoArtista: "The Jes
 const missAtomicBomb = { nomeDaMusica: "Miss Atomic Bomb", nomeDoArtista: "The Killers", arquivo: "miss_atomic_bomb", like: false };
 const trouble = { nomeDaMusica: "Trouble", nomeDoArtista: "Yusuf / Cat Stevens", arquivo: "trouble", like: false };
 
-const playlistPadrao = [patience, ifIHadAGun, imOnFire, itsAllOverNowBabyBlue, trouble, iWannaBeAdored, missAtomicBomb, beiraMar, justLikeHeaven, justLikeHoney, habeasCorpus];
+const playlistPadrao = [
+  patience, ifIHadAGun, imOnFire, itsAllOverNowBabyBlue, trouble,
+  iWannaBeAdored, missAtomicBomb, beiraMar, justLikeHeaven,
+  justLikeHoney, habeasCorpus
+];
 
 // playlistOrdenada salva com likes etc
 const playlistOrdenada = JSON.parse(localStorage.getItem('playlist')) ?? playlistPadrao;
@@ -69,7 +80,8 @@ function getState() {
     muted: false,
     embaralhado: false,
     repetindo: false,
-    filaAberta: false
+    filaAberta: false,
+    filtroFila: 'todas'
   };
 }
 
@@ -106,9 +118,11 @@ function setPlayUI(playing) {
   if (playing) {
     play.classList.add('hide');
     pause.classList.remove('hide');
+    capaDisco.classList.add('tocando');
   } else {
     pause.classList.add('hide');
     play.classList.remove('hide');
+    capaDisco.classList.remove('tocando');
   }
 }
 
@@ -207,6 +221,9 @@ function carregaMusica() {
 
   // salva no estado (arquivo atual)
   setState({ indexArquivo: faixa.arquivo });
+
+  // se overlay estiver aberto, mantém destaque
+  if (isFilaAberta()) renderFila();
 }
 
 function voltaMusica() {
@@ -235,7 +252,8 @@ function atualizaProgresso() {
   if (!Number.isFinite(musica.duration) || musica.duration <= 0) return;
 
   const tamanhoBarra = (musica.currentTime / musica.duration) * 100;
-  barra.style.setProperty('--progresso', `${tamanhoBarra}%`);  tempoAtual.innerText = converteTempo(musica.currentTime);
+  barra.style.setProperty('--progresso', `${tamanhoBarra}%`);
+  tempoAtual.innerText = converteTempo(musica.currentTime);
 
   // salvar de tempos em tempos
   if (!dragging) setState({ currentTime: musica.currentTime });
@@ -279,12 +297,14 @@ function tocaMusica() {
   musica.play();
   setPlayUI(true);
   setState({ playing: true });
+  if (isFilaAberta()) renderFila();
 }
 
 function pausaMusica() {
   musica.pause();
   setPlayUI(false);
   setState({ playing: false });
+  if (isFilaAberta()) renderFila();
 }
 
 // ---------- Volume / Mute ----------
@@ -310,21 +330,75 @@ function atualizaIconeVolume() {
   else icon.classList.add('bi-volume-up');
 }
 
-// ---------- Fila ----------
-function toggleFila(open) {
-  const shouldOpen = (typeof open === 'boolean') ? open : fila.classList.contains('hide');
-  if (shouldOpen) fila.classList.remove('hide');
-  else fila.classList.add('hide');
-  setState({ filaAberta: shouldOpen });
+/* =========================
+   FILA OVERLAY (MODAL)
+========================= */
+function isFilaAberta(){
+  return !filaOverlay.classList.contains('hide');
+}
+
+function abrirFila() {
+  filaOverlay.classList.remove('hide');
+  filaOverlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('no-scroll');
+  setState({ filaAberta: true });
+
+  renderFila();
+
+  // foco no botão fechar (melhor navegação)
+  setTimeout(() => fecharFila.focus(), 0);
+}
+
+function fecharFilaOverlay() {
+  filaOverlay.classList.add('hide');
+  filaOverlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('no-scroll');
+  setState({ filaAberta: false });
+}
+
+function toggleFila() {
+  if (isFilaAberta()) fecharFilaOverlay();
+  else abrirFila();
+}
+
+function setFiltroFila(novo) {
+  filtroFila = novo;
+  tabTodas.classList.toggle('ativo', filtroFila === 'todas');
+  tabCurtidas.classList.toggle('ativo', filtroFila === 'curtidas');
+
+  tabTodas.setAttribute('aria-selected', String(filtroFila === 'todas'));
+  tabCurtidas.setAttribute('aria-selected', String(filtroFila === 'curtidas'));
+
+  setState({ filtroFila });
+  renderFila();
 }
 
 function renderFila() {
   filaLista.innerHTML = '';
 
-  playlistEmbaralhada.forEach((m, i) => {
+  // índices a exibir
+  const indices = [];
+  for (let i = 0; i < playlistEmbaralhada.length; i++) {
+    const m = playlistEmbaralhada[i];
+    if (filtroFila === 'curtidas' && !m.like) continue;
+    indices.push(i);
+  }
+
+  // estado vazio
+  const vazio = (filtroFila === 'curtidas' && indices.length === 0);
+  filaVazia.classList.toggle('hide', !vazio);
+  filaLista.classList.toggle('hide', vazio);
+
+  indices.forEach((i) => {
+    const m = playlistEmbaralhada[i];
+
     const li = document.createElement('li');
-    li.className = 'fila-item' + (i === index ? ' ativa' : '');
-    li.dataset.index = i;
+
+    const ehAtual = (i === index);
+    const tocandoAgora = ehAtual && isPlaying();
+
+    li.className = 'fila-item' + (tocandoAgora ? ' tocando' : '');
+    li.dataset.index = String(i);
 
     const meta = document.createElement('div');
     meta.className = 'meta';
@@ -351,7 +425,7 @@ function renderFila() {
       index = i;
       carregaMusica();
       tocaMusica();
-      renderFila();
+      // não fecha automaticamente, fica estilo Spotify mesmo
     });
 
     filaLista.appendChild(li);
@@ -363,6 +437,12 @@ function atalhosTeclado(e) {
   // evitar capturar em input range (volume)
   const tag = (document.activeElement?.tagName || '').toLowerCase();
   if (tag === 'input') return;
+
+  // ESC fecha overlay
+  if (e.key === 'Escape' && isFilaAberta()) {
+    fecharFilaOverlay();
+    return;
+  }
 
   if (e.code === 'Space') {
     e.preventDefault();
@@ -390,6 +470,10 @@ function init() {
 
   const state = getState();
 
+  // tabs
+  filtroFila = state.filtroFila || 'todas';
+  setFiltroFila(filtroFila);
+
   // aplicar shuffle e repeat
   aplicaEmbaralhado(!!state.embaralhado);
   aplicaRepeticao(!!state.repetindo);
@@ -406,10 +490,8 @@ function init() {
   aplicaMute(!!state.muted);
 
   // restaurar fila aberta/fechada
-  toggleFila(!!state.filaAberta);
-
-  // render fila
-  renderFila();
+  if (state.filaAberta) abrirFila();
+  else fecharFilaOverlay();
 
   // restaurar tempo e play quando possível
   musica.addEventListener('loadedmetadata', () => {
@@ -477,14 +559,23 @@ mute.addEventListener('click', () => {
   aplicaMute(!musica.muted);
 });
 
-// Fila
-btnFila.addEventListener('click', () => toggleFila());
-fecharFila.addEventListener('click', () => toggleFila(false));
+// Fila overlay
+btnFila.addEventListener('click', toggleFila);
+fecharFila.addEventListener('click', fecharFilaOverlay);
+
+// clicar fora do painel fecha
+filaOverlay.addEventListener('click', (e) => {
+  if (e.target === filaOverlay) fecharFilaOverlay();
+});
+
+// tabs
+tabTodas.addEventListener('click', () => setFiltroFila('todas'));
+tabCurtidas.addEventListener('click', () => setFiltroFila('curtidas'));
 
 // Persistir playing state se o usuário der play/pause fora
 musica.addEventListener('play', () => setState({ playing: true }));
 musica.addEventListener('pause', () => setState({ playing: false }));
 
 musica.addEventListener('error', () => {
-    console.error("Erro ao carregar a música:", musica.src);
+  console.error("Erro ao carregar a música:", musica.src);
 });
