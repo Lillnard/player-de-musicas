@@ -2,138 +2,288 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #000;
-    color: aliceblue;
     font-family: sans-serif;
     user-select: none;
-}
-
-.container {
+  }
+  
+  body{
+    background-color: #000;
+    color: aliceblue;
+  }
+  
+  .container {
     width: 360px;
     height: 100vh;
     margin: 0 auto;
-}
-
-.titulo {
+    padding-bottom: 18px;
+  }
+  
+  .titulo {
     text-align: center;
-    padding: 1em 0 2em;
-}
-
-.titulo span{
+    padding: 1em 0 1.2em;
+  }
+  
+  .titulo span{
     color: #1ED760;
-}
-
-.titulo i{
+  }
+  
+  .titulo i{
     margin-right: 10px;
     font-size: 40px;
     color: #1ED760;
-}
-
-.capa{
+  }
+  
+  .capa{
     display: flex;
     justify-content: center;
-}
-
-.capa img { 
+    position: relative;
+  }
+  
+  .capa img {
     height: 320px;
     width: 320px;
-}
-
-.musica__container{
+    object-fit: cover;
+    border-radius: 10px;
+    transition: filter .2s ease;
+  }
+  
+  .capa img.loading-state{
+    filter: blur(2px);
+  }
+  
+  .loading{
+    position: absolute;
+    bottom: 12px;
+    padding: 6px 10px;
+    font-size: 12px;
+    background: rgba(0,0,0,.6);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 999px;
+    display: none;
+  }
+  
+  .loading.show{
+    display: inline-flex;
+  }
+  
+  .musica__container{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-}
-
-.nome-musica{
-    padding-top: 20px;
-    font-size: 30px;
-}
-
-.nome-artista{
+    gap: 10px;
+    padding-top: 6px;
+  }
+  
+  .nome-musica{
+    padding-top: 16px;
+    font-size: 28px;
+    line-height: 1.1;
+  }
+  
+  .nome-artista{
     font-size: 15px;
     color: #cacaca;
-}
-
-.curtir i{
+    padding-top: 4px;
+  }
+  
+  .acoes-topo{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-top: 18px;
+  }
+  
+  .curtir i{
     font-size: 25px;
     color: #cacacab7;
-}
-
-.progresso-container{
-    padding: 20px 0;
+  }
+  
+  .btn-fila i{
+    font-size: 22px;
+    color: #cacacab7;
+  }
+  
+  .progresso-container{
+    padding: 18px 0;
     cursor: pointer;
-}
-
-.barra-de-progresso{
-    background-color: #cacaca48;
-    height: 3px;
-    padding-bottom: 5px;
-}
-.progresso{
+  }
+  
+  .barra-de-progresso{
     --progresso: 0%;
-    height: 2px;
-    background-color: white;
+    background-color: rgba(202,202,202,.28);
+    height: 6px;
+    border-radius: 999px;
+    position: relative;
+  }
+  
+  .progresso{
+    height: 100%;
+    background-color: #1ED760;
     width: var(--progresso);
-}
-
-.tempo-container{
+    border-radius: 999px;
+  }
+  
+  .thumb{
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #1ED760;
+    left: var(--progresso);
+    pointer-events: none;
+  }
+  
+  .tempo-container{
     display: flex;
     justify-content: space-between;
-}
-
-.tempo-atual, .tempo-total{
+    padding-top: 10px;
+  }
+  
+  .tempo-atual, .tempo-total{
     color: #cacaca;
-    font-size: 15px;
-}
-
-button{
+    font-size: 14px;
+  }
+  
+  button{
     background-color: transparent;
     border: none;
     cursor: pointer;
-    transition: .2s
-}
-
-button:active i{
-    color: #cacaca8a;
-}
-
-button.ativo i{
+    transition: .2s;
+  }
+  
+  button:active i{
+    color: rgba(202,202,202,.55);
+  }
+  
+  button.ativo i{
     color: #1ED760;
-}
-
-.navegacao{
+  }
+  
+  .navegacao{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin: 0 0 15px;
-}
-
-.navegacao i {
+    margin: 0 0 10px;
+  }
+  
+  .navegacao i {
     color: #ffffff;
-}
-
-#play, #pause{
+  }
+  
+  #play, #pause{
     font-size: 50px;
-}
-
-#retornar, #avancar{
+  }
+  
+  #retornar, #avancar{
     font-size: 30px;
-}
-
-#embaralhar, #repetir, #repetir1{
+  }
+  
+  #embaralhar, #repetir, #repetir1{
     font-size: 25px;
-}
-
-.hide{
-    display: none;
-}
-
-
-@media screen and (max-width: 500px){
-    
+  }
+  
+  .hide{
+    display: none !important;
+  }
+  
+  /* Volume */
+  .volume-container{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 4px;
+  }
+  
+  .volume-container input[type="range"]{
+    width: 100%;
+    accent-color: #1ED760;
+  }
+  
+  .mute i{
+    font-size: 22px;
+    color: #fff;
+  }
+  
+  /* Fila */
+  .fila{
+    margin-top: 12px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    padding: 10px;
+    background: rgba(255,255,255,.03);
+  }
+  
+  .fila-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  
+  .fila-header h4{
+    font-size: 14px;
+    color: #cacaca;
+  }
+  
+  .fila-lista{
+    list-style: none;
+    max-height: 220px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+  
+  .fila-item{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .15s;
+  }
+  
+  .fila-item:hover{
+    background: rgba(255,255,255,.06);
+  }
+  
+  .fila-item .meta{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .fila-item .m{
+    font-size: 14px;
+  }
+  
+  .fila-item .a{
+    font-size: 12px;
+    color: #cacaca;
+  }
+  
+  .fila-item .like{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #1ED760;
+  }
+  
+  .fila-item.ativa{
+    outline: 1px solid rgba(30,215,96,.35);
+    background: rgba(30,215,96,.08);
+  }
+  
+  @media screen and (max-width: 500px){
     .container{
-        width: 90%;
+      width: 90%;
     }
-}
+  
+    .capa img{
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+  }

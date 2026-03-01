@@ -1,76 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="icon" href="imagens/favicon-32x32.png">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
 
-    <!-- font awsome -->
-    <script src="https://kit.fontawesome.com/2021d3515c.js" crossorigin="anonymous"></script>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <title>Player de Música</title>
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/2021d3515c.js" crossorigin="anonymous"></script>
 
+  <title>Player de Música</title>
 </head>
 <body>
 
-    <div class="container">
-            
-        <div class="titulo">
-            <h1><i class="fa-brands fa-spotify fa-flip-both"></i></i>Spoti<span>FAKE</span></h1>
-        </div>
+  <div class="container">
 
-        <div class="capa">
-            <img src="" alt="Capa do disco" id="capa">
-        </div>
-
-        <audio src=""  id="audio"></audio>
-
-        <div class="musica__container">
-            <div class="musica">
-                <h2 class="nome-musica" id="nome-musica">Nome da música</h2>
-                <h3 class="nome-artista" id="nome-artista">Nome da banda</h3>
-            </div>
-            <button class="curtir" id="curtir">
-                <i class="bi bi-heart"></i>
-            </button>
-        </div>
-
-        <div class="progresso-container" id="progresso-container">
-            <div class="barra-de-progresso" id="barra-progresso">
-                <div class="progresso" id="progresso"></div>
-            </div>
-            <div class="tempo-container">
-                <div class="tempo-atual" id="tempo-atual">
-                    00:00
-                </div>
-                <div class="tempo-total" id="tempo-total">
-                    00:00
-                </div>
-            </div>
-        </div>
-
-        <div class="navegacao">
-            <button id="embaralhar"><i class="bi bi-shuffle"></i></button>
-
-            <button id="retornar"><i class="fa-solid fa-backward-step"></i></button> 
-
-            <button id="play"><i class="fa-solid fa-circle-play"></i></button>
-            
-            <button  id="pause" class="hide"><i class="fa-solid fa-circle-pause"></i></button>
-
-            <button id="avancar"><i class="fa-solid fa-forward-step"></i></button>
-
-            <button id="repetir"><i class="bi bi-repeat" ></i></button>
-            <button id="repetir1" class="hide"><i class="bi bi-repeat-1 " ></i></button>
-        </div>
+    <div class="titulo">
+      <h1><i class="fa-brands fa-spotify fa-flip-both"></i>Spoti<span>FAKE</span></h1>
     </div>
 
-    <script src="script.js"></script>
-    
+    <div class="capa">
+      <img src="" alt="Capa do disco" id="capa">
+      <div class="loading" id="loading">Carregando...</div>
+    </div>
+
+    <audio src="" id="audio" preload="metadata"></audio>
+
+    <div class="musica__container">
+      <div class="musica">
+        <h2 class="nome-musica" id="nome-musica">Nome da música</h2>
+        <h3 class="nome-artista" id="nome-artista">Nome da banda</h3>
+      </div>
+
+      <div class="acoes-topo">
+        <button class="curtir" id="curtir" title="Curtir">
+          <i class="bi bi-heart"></i>
+        </button>
+
+        <button class="btn-fila" id="btn-fila" title="Abrir fila">
+          <i class="bi bi-music-note-list"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="progresso-container" id="progresso-container">
+      <div class="barra-de-progresso" id="barra-progresso">
+        <div class="progresso" id="progresso"></div>
+        <div class="thumb" id="thumb"></div>
+      </div>
+
+      <div class="tempo-container">
+        <div class="tempo-atual" id="tempo-atual">00:00:00</div>
+        <div class="tempo-total" id="tempo-total">00:00:00</div>
+      </div>
+    </div>
+
+    <div class="navegacao">
+      <button id="embaralhar" title="Embaralhar"><i class="bi bi-shuffle"></i></button>
+
+      <button id="retornar" title="Anterior"><i class="fa-solid fa-backward-step"></i></button>
+
+      <button id="play" title="Play"><i class="fa-solid fa-circle-play"></i></button>
+      <button id="pause" class="hide" title="Pause"><i class="fa-solid fa-circle-pause"></i></button>
+
+      <button id="avancar" title="Próxima"><i class="fa-solid fa-forward-step"></i></button>
+
+      <button id="repetir" title="Repetir"><i class="bi bi-repeat"></i></button>
+      <button id="repetir1" class="hide" title="Repetir 1"><i class="bi bi-repeat-1"></i></button>
+    </div>
+
+    <div class="volume-container">
+      <button id="mute" class="mute" title="Mute">
+        <i class="bi bi-volume-up"></i>
+      </button>
+
+      <input
+        type="range"
+        id="volume"
+        min="0"
+        max="1"
+        step="0.01"
+        value="0.8"
+        aria-label="Volume"
+      />
+    </div>
+
+    <!-- Painel da fila -->
+    <div class="fila hide" id="fila">
+      <div class="fila-header">
+        <h4>Fila</h4>
+        <button id="fechar-fila" title="Fechar fila">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <ul class="fila-lista" id="fila-lista"></ul>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
